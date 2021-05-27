@@ -1,102 +1,130 @@
 import React, {useState} from 'react'
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native'
+import { Animated, Button, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-import * as tf from '@tensorflow/tfjs'
-import * as mn from '@tensorflow-models/mobilenet'
-import {fetch} from '@tensorflow/tfjs-react-native'
-
-export default function CameraView({photo, retakePicture, savePhoto}) {
-    const [loading, setLoading] = useState('')
-
-    async function prediction(url){
-        setLoading("analyzing....")
-        await tf.ready()
-        setLoading("analyzing Model....")
-        const model = await mn.load()
-        const response = await fetch(url, {}, {isBinary: true})
-        const imageData = await response.arrayBuffer()
-    }
-
+export default function CameraView({photo, retakePicture, loading}) {
     return (
-        <View
-            style={{
-                backgroundColor: 'transparent',
-                flex: 1,
-                width: '100%',
-                height: '50%'
-            }}
-        >
+        <View style={styles.root}>
             <ImageBackground
                 source={{uri: photo && photo.uri}}
-                style={{
-                  flex: 1
-                }}
+                style={styles.imageBK}
             >
-                <View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'column',
-                        padding: 15,
-                        justifyContent: 'space-between',
-                        // backgroundColor: "red",
-                    }}
-                >
-                    <View 
-                        style={{
-                            // backgroundColor: "green",
-                            flex: 1,
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <View
-                            style={{
-                                backgroundColor: 'rgba(52, 52, 52, 0.8)',
-                                width: "50%",
-                                height: "20%",
-                                justifyContent: "center"
-                            }}
-                        >
-                            <Text
-                                style={{
-                                    color: "white",
-                                    textAlign: "center"
-                                }}
-                            >
+                <View style={styles.imageBkView}>
+                    <Animated.View style={styles.analysMenu}>
+                        <TouchableOpacity style={styles.btn}>
+                            <Text style={styles.btnText}>Analyze</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.btn}>
+                            <Text style={styles.btnText}>Save</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.cancel} onPress={retakePicture}>
+                            <Text style={styles.cancelText}>CANCEL</Text>
+                        </TouchableOpacity>
+                        {/* <View style={styles.tensorContainer}>
+                            <Text style={styles.tensorText}>
                                 {loading}
                             </Text>
-                        </View>
-                    </View>
-                     <View
-                        style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between'
-                        }}
-                    >
-                        <TouchableOpacity
-                            onPress={retakePicture}
-                            style={{
-                                width: 130,
-                                height: 40,
+                        </View> */}
+                    </Animated.View>
 
-                                alignItems: 'center',
-                                borderRadius: 4
-                            }}
-                        >
-                            <Text
-                                style={{
-                                color: '#fff',
-                                fontSize: 20
-                                }}
-                            >
+                    {/* <View style={styles.retakeContainer}>
+                        <TouchableOpacity onPress={retakePicture} style={styles.retakeBtn}>
+                            <Text style={styles.retakeText}>
                                 Re-take
                             </Text>
                         </TouchableOpacity>
-                    </View>
+                    </View> */}
                 </View>
             </ImageBackground>
-
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    root: {
+        backgroundColor: 'transparent',
+        flex: 1,
+        width: '100%',
+        height: '50%'
+    },
+    imageBK: {
+        flex: 1, 
+    },
+    imageBkView: {
+        flex: 1,
+        flexDirection: 'column',
+        // padding: 15,
+        justifyContent: 'flex-end',
+        alignItems: 'center',
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+        // backgroundColor: "red",
+    },
+    analysMenu: {
+        // backgroundColor: "#14213D",
+        backgroundColor: "#1f1f1f",
+        justifyContent: "center",
+        alignItems: "center",
+        width: "60%",
+        borderRadius: 10,
+        marginBottom: 50,
+        padding: 15,
+    },
+    tensorContainer: {
+        backgroundColor: 'rgba(52, 52, 52, 0.8)',
+        width: "50%",
+        height: "20%",
+        justifyContent: "center"
+    },
+    tensorText: {
+        color: "white",
+        textAlign: "center"
+    },
+    retakeContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        backgroundColor: "pink"
+    },
+    retakeBtn: {
+        width: 130,
+        height: 40,
+        alignItems: 'center',
+        borderRadius: 4,
+        backgroundColor: "red",
+    },
+    retakeText: {
+        color: '#fff',
+        fontSize: 20
+    },
+    btn: {
+        backgroundColor: "white",
+        width: "80%",
+        height: 50,
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 15,
+    }  ,
+    btnText: {
+        color: "black",
+        fontSize: 14,
+        letterSpacing: 1,
+        fontWeight: '500',
+    },
+    cancel: {
+        // backgroundColor: "yellow",
+        width: "80%",
+        height: 50,
+        borderRadius: 30,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    cancelText: {
+        color: "white",
+        fontSize: 15,
+        letterSpacing: 1,
+        fontWeight: '600'
+    }
+})
 

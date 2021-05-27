@@ -11,7 +11,7 @@ export default function SnapButton({takePicture}) {
                 flex: 1,
                 width: '100%',
                 padding: 20,
-                justifyContent: 'space-between'
+                justifyContent: 'space-between',
             }}
         >
             <View

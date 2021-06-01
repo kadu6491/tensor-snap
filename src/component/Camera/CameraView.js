@@ -1,130 +1,128 @@
-import React, {useState} from 'react'
-import { Animated, Button, ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Camera } from 'expo-camera';
 
-export default function CameraView({photo, retakePicture, loading}) {
-    return (
-        <View style={styles.root}>
-            <ImageBackground
-                source={{uri: photo && photo.uri}}
-                style={styles.imageBK}
-            >
-                <View style={styles.imageBkView}>
-                    <Animated.View style={styles.analysMenu}>
-                        <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btnText}>Analyze</Text>
-                        </TouchableOpacity>
+import * as tf from '@tensorflow/tfjs'
+import * as mn from '@tensorflow-models/mobilenet'
+import {fetch} from '@tensorflow/tfjs-react-native'
+import * as jpeg from 'jpeg-js'
 
-                        <TouchableOpacity style={styles.btn}>
-                            <Text style={styles.btnText}>Save</Text>
-                        </TouchableOpacity>
+import FlipCameraButton from '../Buttons/FlipCameraButton';
+import SnapButton from '../Buttons/SnapButton';
+import ImageView from './ImageView';
 
-                        <TouchableOpacity style={styles.cancel} onPress={retakePicture}>
-                            <Text style={styles.cancelText}>CANCEL</Text>
-                        </TouchableOpacity>
-                        {/* <View style={styles.tensorContainer}>
-                            <Text style={styles.tensorText}>
-                                {loading}
-                            </Text>
-                        </View> */}
-                    </Animated.View>
 
-                    {/* <View style={styles.retakeContainer}>
-                        <TouchableOpacity onPress={retakePicture} style={styles.retakeBtn}>
-                            <Text style={styles.retakeText}>
-                                Re-take
-                            </Text>
-                        </TouchableOpacity>
-                    </View> */}
-                </View>
-            </ImageBackground>
-        </View>
-    )
+let camera = Camera
+
+export default function CameraView({navigation}) {
+  const [hasPermission, setHasPermission] = useState(null);
+  const [type, setType] = useState(Camera.Constants.Type.back);
+  const [previewVisible, setPreviewVisible] = useState(false)
+  const [capturedImage, setCapturedImage] = useState(null)
+  const [loading, setLoading] = useState('')
+  const [label, setLabel] = useState([])
+
+  const takePicture = async () => {
+      if (!camera) return
+      const photo = await camera.takePictureAsync()
+      console.log(photo)
+      setPreviewVisible(true)
+      setCapturedImage(photo)
+      // getPrediction(photo.uri)
+  }
+  
+  const retakePicture = () => {
+      setCapturedImage(null)
+      setPreviewVisible(false)
+  }
+
+  async function getPrediction(url){
+      setLoading("loading")
+      await tf.ready()
+      const model = await mn.load()
+      const response = await fetch(url, {}, {isBinary: true})
+      const imageData = await response.arrayBuffer()
+      const imageTensor = imageToTensor(imageData)
+      setLoading("Getting Classification Result....")
+      const prediction = await model.classify(imageTensor)
+      console.log(prediction[0])
+      setLoading("done")
+  }
+
+  function imageToTensor(rawData){
+    const {width, height, data} = jpeg.decode(rawData, true)
+    const buffer = new Uint8Array(width*height*3)
+    let offset = 0;
+    for(let i = 0; i < buffer.length; i+=3)
+    {
+        buffer[i] = data[offset]
+        buffer[i + 1] = data[offset + 1]
+        buffer[i + 2] = data[offset + 2]
+        buffer[i + 3] = data[offset + 3]
+        offset += 4
+    }
+
+    return tf.tensor3d(buffer, [height, width, 3])
+}
+
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await Camera.requestPermissionsAsync();
+      setHasPermission(status === 'granted');
+    })();
+  }, []);
+
+  if (hasPermission === null) {
+    return <View />;
+  }
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+  return (
+    <View style={styles.container}>
+      {previewVisible && capturedImage ? (
+        <ImageView 
+          photo={capturedImage} 
+          retakePicture={retakePicture}
+          loading={loading}
+          navigation={navigation}
+        />) : (
+        <Camera 
+        style={styles.camera} 
+        type={type}
+        ref={(r) => {
+          camera = r
+        }}
+      >
+        <FlipCameraButton />
+        <SnapButton takePicture={takePicture} />
+      </Camera>
+      )}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-    root: {
-        backgroundColor: 'transparent',
-        flex: 1,
-        width: '100%',
-        height: '50%'
-    },
-    imageBK: {
-        flex: 1, 
-    },
-    imageBkView: {
-        flex: 1,
-        flexDirection: 'column',
-        // padding: 15,
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        backgroundColor: "rgba(0, 0, 0, 0.4)",
-        // backgroundColor: "red",
-    },
-    analysMenu: {
-        // backgroundColor: "#14213D",
-        backgroundColor: "#1f1f1f",
-        justifyContent: "center",
-        alignItems: "center",
-        width: "60%",
-        borderRadius: 10,
-        marginBottom: 50,
-        padding: 15,
-    },
-    tensorContainer: {
-        backgroundColor: 'rgba(52, 52, 52, 0.8)',
-        width: "50%",
-        height: "20%",
-        justifyContent: "center"
-    },
-    tensorText: {
-        color: "white",
-        textAlign: "center"
-    },
-    retakeContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        marginBottom: 20,
-        backgroundColor: "pink"
-    },
-    retakeBtn: {
-        width: 130,
-        height: 40,
-        alignItems: 'center',
-        borderRadius: 4,
-        backgroundColor: "red",
-    },
-    retakeText: {
-        color: '#fff',
-        fontSize: 20
-    },
-    btn: {
-        backgroundColor: "white",
-        width: "80%",
-        height: 50,
-        borderRadius: 30,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginTop: 15,
-    }  ,
-    btnText: {
-        color: "black",
-        fontSize: 14,
-        letterSpacing: 1,
-        fontWeight: '500',
-    },
-    cancel: {
-        // backgroundColor: "yellow",
-        width: "80%",
-        height: 50,
-        borderRadius: 30,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    cancelText: {
-        color: "white",
-        fontSize: 15,
-        letterSpacing: 1,
-        fontWeight: '600'
-    }
-})
-
+  container: {
+    flex: 1,
+  },
+  camera: {
+    flex: 1,
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: 'transparent',
+    flexDirection: 'row',
+    margin: 20,
+  },
+  button: {
+    flex: 0.1,
+    alignSelf: 'flex-end',
+    alignItems: 'center',
+  },
+  text: {
+    fontSize: 18,
+    color: 'white',
+  },
+});

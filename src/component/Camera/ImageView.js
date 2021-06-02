@@ -3,7 +3,7 @@ import {ImageBackground, SafeAreaView, StyleSheet, Text, TouchableOpacity, View 
 
 export default function ImageView({photo, retakePicture, loading, navigation}) {
     const handleAnalysis = () => {
-        navigation.navigate('Analysis')
+        navigation.navigate('Analysis', photo)
     }
     return (
         <View style={styles.root}>
@@ -12,11 +12,11 @@ export default function ImageView({photo, retakePicture, loading, navigation}) {
                 style={styles.imageBK}
             >
                 <View style={styles.imageBkView}>
-                    <SafeAreaView>
+                    {/* <SafeAreaView>
                     <View style={styles.loading}>
                         <Text>Do something here</Text>
                     </View>
-                    </SafeAreaView>
+                    </SafeAreaView> */}
                     <View style={styles.analysMenu}>
                         <TouchableOpacity 
                             style={styles.btn}
@@ -54,10 +54,10 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: 'column',
         // padding: 15,
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         alignItems: 'center',
-        // backgroundColor: "rgba(0, 0, 0, 0.4)",
-        backgroundColor: "red",
+        backgroundColor: "rgba(0, 0, 0, 0.4)",
+        // backgroundColor: "red",
     },
     loading: {
         // backgroundColor: "pink",

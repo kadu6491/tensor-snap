@@ -2,13 +2,13 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'; 
 
-export default function FlipCameraButton() {
+export default function FlipCameraButton({onPress}) {
     return (
         <View style={styles.main}>
             <SafeAreaView>
                 <View style={styles.root}>
                     <TouchableOpacity>
-                        <MaterialIcons name="flip-camera-ios" size={26} color="white" />
+                        <MaterialIcons name="flip-camera-ios" size={26} color="white" onPress={onPress}/>
                         {/* <Ionicons name="camera-reverse" size={24} color="white" /> */}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.flash}>

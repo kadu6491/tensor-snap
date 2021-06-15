@@ -7,12 +7,14 @@ import * as jpeg from 'jpeg-js'
 
 import { Text, TouchableOpacity, View, SafeAreaView, FlatList} from 'react-native'
 import ProgressBar from '../Loading/ProgressBar'
+import { ListItem } from 'react-native-elements'
 
 export default function Analyze({ route, navigation }) {
     const img = route.params;
 
     const [loading, setLoading] = useState('')
     const [guess, setGuess] = useState([])
+    const [expanded, setExpanded] = useState(false)
 
     const getPrediction = async () => {
         setLoading("loading")
@@ -43,13 +45,32 @@ export default function Analyze({ route, navigation }) {
   
       return tf.tensor3d(buffer, [height, width, 3])
   }
-  useEffect(() => {
-    getPrediction()
-  }, [])
+//   useEffect(() => {
+//     getPrediction()
+//   }, [])
   
     return (
        <View>
-           {loading === 'loading' ? <ProgressBar /> 
+           <ListItem.Accordion
+                content={
+                    <>
+                        <ListItem.Content>
+                            <ListItem.Title>
+                                Text in Image
+                            </ListItem.Title>
+                            <Text>Niiii</Text>
+                        </ListItem.Content>
+                    </>
+                }
+                isExpanded={expanded}
+                onPress={() => {
+                    setExpanded(!expanded)
+                }}
+           >
+            <Text>Many things going</Text>
+            <Text>You will like it</Text>
+           </ListItem.Accordion>
+           {/* {loading === 'loading' ? <ProgressBar /> 
             : 
             <FlatList 
                 data={guess}
@@ -58,7 +79,7 @@ export default function Analyze({ route, navigation }) {
                     <Text>{item.className}</Text>
                 )}
             />
-            }
+            } */}
        </View>
     )
 }

@@ -31,6 +31,14 @@ export default function CameraView({navigation}) {
       setPreviewVisible(false)
   }
 
+  const onPress = () => {
+    setType(
+      type === Camera.Constants.Type.back
+        ? Camera.Constants.Type.front
+        : Camera.Constants.Type.back
+    );
+  }
+
 
   useEffect(() => {
     (async () => {
@@ -61,7 +69,7 @@ export default function CameraView({navigation}) {
           camera = r
         }}
       >
-        <FlipCameraButton />
+        <FlipCameraButton onPress={onPress} />
         <SnapButton takePicture={takePicture} />
       </Camera>
       )}

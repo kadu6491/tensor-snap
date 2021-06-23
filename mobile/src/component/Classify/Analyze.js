@@ -7,14 +7,13 @@ import * as jpeg from 'jpeg-js'
 
 import { Text, TouchableOpacity, View, SafeAreaView, FlatList} from 'react-native'
 import ProgressBar from '../Loading/ProgressBar'
-import { ListItem } from 'react-native-elements'
+import ItemList from '../Lists/ItemList'
 
 export default function Analyze({ route, navigation }) {
     const img = route.params;
 
     const [loading, setLoading] = useState('')
     const [guess, setGuess] = useState([])
-    const [expanded, setExpanded] = useState(false)
 
     const getPrediction = async () => {
         setLoading("loading")
@@ -45,41 +44,25 @@ export default function Analyze({ route, navigation }) {
   
       return tf.tensor3d(buffer, [height, width, 3])
   }
-//   useEffect(() => {
-//     getPrediction()
-//   }, [])
+  useEffect(() => {
+    getPrediction()
+  }, [])
   
     return (
        <View>
-           <ListItem.Accordion
-                content={
-                    <>
-                        <ListItem.Content>
-                            <ListItem.Title>
-                                Text in Image
-                            </ListItem.Title>
-                            <Text>Niiii</Text>
-                        </ListItem.Content>
-                    </>
-                }
-                isExpanded={expanded}
-                onPress={() => {
-                    setExpanded(!expanded)
-                }}
-           >
-            <Text>Many things going</Text>
-            <Text>You will like it</Text>
-           </ListItem.Accordion>
-           {/* {loading === 'loading' ? <ProgressBar /> 
+           {/* <ItemList title={"Works"} translate={"Nothing too crazy"}/> */}
+           {loading === 'loading' ? <ProgressBar /> 
             : 
+            // <Text>{guess.className}</Text>
             <FlatList 
                 data={guess}
-                keyExtractor={(id) => id}
+                keyExtractor={item => item.className}
                 renderItem={({ item }) => (
-                    <Text>{item.className}</Text>
+                    <ItemList title={item.className} translate={"Working on it"}/>
+                    // <Text>{item.className}</Text>
                 )}
             />
-            } */}
+            }
        </View>
     )
 }

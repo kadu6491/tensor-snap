@@ -3,4 +3,4 @@ flask
 flask-cors
 translate
 numpy
-tensorflow_text
+tensorflow-text

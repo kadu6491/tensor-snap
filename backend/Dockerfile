@@ -1,0 +1,10 @@
+FROM python:3.8-alpine
+
+WORKDIR /app
+RUN apt update -y
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+COPY src/ /app
+EXPOSE 5000
+CMD ["python3", "app.py"]

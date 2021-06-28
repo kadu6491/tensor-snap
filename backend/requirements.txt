@@ -1,0 +1,7 @@
+PyDictionary
+flask
+flask-cors
+tensorflow
+translate
+numpy
+tensorflow_text

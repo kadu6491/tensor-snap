@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   <h3>Image URL: {{ word }}</h3>
+    <h3>Image Objects - </h3>
+    <div style="margin-left: 40px;">
+        {% for i in img %}
+            <li>{{ i }}</li>
+        {% endfor %}
+    </div>
+    <h3>definitions: </h3>
+    <div style="margin-left: 40px;">
+        {% if m == None %}
+            <p>Can't find the definition</p>
+        {% else %}
+             {% for i in m.keys() %}
+                <li>{{ i }}</li>
+                <div>
+                    {% for x in range(2) %}
+                        <p style="margin-left: 40px;"> - {{ m[i][x] }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <h3>spanish: {{ t }}</h3>
+</body>
+</html>

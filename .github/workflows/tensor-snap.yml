@@ -37,5 +37,5 @@ jobs:
       # run the docker compose shell
       - name: run docker compose
         run: |
-          cd compose
+          cd /home/g-admin/Desktop/server/tensor-snap/compose
           ./rebuild.sh

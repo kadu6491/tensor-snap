@@ -2,4 +2,6 @@ PyDictionary
 flask
 flask-cors
 translate
-# numpy
+numpy
+tensorflow-text
+tensorflow

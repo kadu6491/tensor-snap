@@ -1,5 +1,5 @@
-PyDictionary
+# PyDictionary
 flask
 flask-cors
-translate
-numpy
+# translate
+# numpy

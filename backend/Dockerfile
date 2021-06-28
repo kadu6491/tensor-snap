@@ -4,8 +4,8 @@ WORKDIR /app
 # RUN apt update -y
 COPY requirements.txt .
 RUN pip install -r requirements.txt
-RUN pip install tensorflow
-RUN pip install tensorflow-text
+#RUN pip install tensorflow
+#RUN pip install tensorflow-text
 
 COPY src/ /app
 EXPOSE 5000

@@ -8,5 +8,5 @@ RUN pip install -r requirements.txt
 #RUN pip install tensorflow-text
 
 COPY src/ /app
-EXPOSE 5000
+EXPOSE 5001
 CMD ["python3", "app.py"]

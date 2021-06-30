@@ -3,6 +3,8 @@ import React from 'react'
 import { View, Text } from 'react-native'
 import { ListItem } from 'react-native-elements'
 
+import ItemListView from './ItemListView'
+
 function ItemList({title, translate}){
     const [expanded, setExpanded] = React.useState(false)
     return (
@@ -22,7 +24,7 @@ function ItemList({title, translate}){
                     setExpanded(!expanded)
                 }}
            >
-            <Text>{translate}</Text>
+            <ItemListView translate={translate} word={title}/>
            </ListItem.Accordion>
         </View>
     )

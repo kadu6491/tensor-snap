@@ -5,3 +5,4 @@ translate
 numpy
 tensorflow-text
 tensorflow
+textblob

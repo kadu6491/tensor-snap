@@ -13,6 +13,14 @@
 <body>
     <h4 class="m-4 p-3" >Image URL - {{ word }}</h4>
     <div class="m-4 p-3">
+        <h3>Image Objects - </h3>
+        <div style="margin-left: 40px;">
+            {% for i in img %}
+                <li>{{ i }}</li>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="m-4 p-3">
         <button class="btn btn-primary " type="button" data-toggle="collapse" data-target="#english" aria-expanded="false" aria-controls="english">
             English
         </button>

@@ -5,8 +5,10 @@ import { ListItem } from 'react-native-elements'
 
 import ItemListView from './ItemListView'
 
-function ItemList({title, translate}){
+
+function ItemList({title, lang_dic, num, text}){
     const [expanded, setExpanded] = React.useState(false)
+   
     return (
         <View>
             <ListItem.Accordion
@@ -14,7 +16,7 @@ function ItemList({title, translate}){
                     <>
                         <ListItem.Content>
                             <ListItem.Title>
-                                {title}
+                                {text}
                             </ListItem.Title>
                         </ListItem.Content>
                     </>
@@ -24,7 +26,13 @@ function ItemList({title, translate}){
                     setExpanded(!expanded)
                 }}
            >
-            <ItemListView translate={translate} word={title}/>
+            <ItemListView 
+                // translate={translate} 
+                word={title} 
+                lang_dic={lang_dic}
+                num={num}
+                // lang_none={lang_none}
+            />
            </ListItem.Accordion>
         </View>
     )

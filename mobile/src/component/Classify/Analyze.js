@@ -4,11 +4,7 @@ import api from '../../api'
 
 import { Text, View, SafeAreaView, FlatList, StyleSheet} from 'react-native'
 import ProgressBar from '../Loading/ProgressBar'
-import ItemList from '../Lists/ItemList'
 import RoundButtons from '../Buttons/RoundButtons'
-import Spanish from '../Translate/Spanish'
-import English from '../Translate/English'
-import French from '../Translate/French'
 import Translation from '../Translate/Translation'
 
 export default function Analyze({ route, navigation }) {

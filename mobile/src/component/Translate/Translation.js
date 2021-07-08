@@ -18,9 +18,6 @@ function Translation({predict, num, extra}){
                             title={item}
                             text={extra[index]}
                             num={num}
-                            translate={"Working on it"}
-                            lang_dic="Dictionary"
-                            lang_none="No Definition"  
                         />
                         // <Text>{item.className}</Text>
                     )}

@@ -1,8 +1,8 @@
 import React from 'react'
 import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { MaterialIcons, Ionicons } from '@expo/vector-icons'; 
+import { MaterialIcons, Ionicons, Fontisto } from '@expo/vector-icons'; 
 
-export default function FlipCameraButton({onPress}) {
+export default function FlipCameraButton({onPress, uploadBtn}) {
     return (
         <View style={styles.main}>
             <SafeAreaView>
@@ -13,6 +13,10 @@ export default function FlipCameraButton({onPress}) {
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.flash}>
                         <Ionicons name="md-flash-outline" size={26} color="white" />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity style={styles.flash} onPress={uploadBtn}>
+                        <Fontisto name="photograph" size={26} color="white" />
                     </TouchableOpacity>
                 </View>
             </SafeAreaView>

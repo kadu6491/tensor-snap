@@ -6,7 +6,7 @@ import * as Speech from 'expo-speech'
 
 import api from '../../api'
 import Spanish from '../Translate/Spanish'
-import English from '../Translate/English'
+import Language from '../Translate/Language'
 import French from '../Translate/French'
 
 
@@ -40,9 +40,36 @@ function ItemListView(props){
     }, [])
     return (
         <View style={styles.root}>
-            {props.num === 0 ? <English styles={styles.dic_text} eng_def={eng_def}/> : null}
-            {props.num === 1 ? <Spanish spa_def={spa_def}/> : null}
-            {props.num === 2 ? <French fra_def={fra_def}/> : null}
+            {props.num === 0 
+                ? <Language 
+                    styles={styles} 
+                    lang_def={eng_def}
+                    def_text="Dictionary"
+                    nodef_text="No definition"
+                /> 
+                : null
+            }
+            {props.num === 1 
+                ? <Language 
+                    styles={styles} 
+                    lang_def={spa_def}
+                    def_text="Diccionario"
+                    nodef_text="Sin Definición"
+                /> 
+                : null
+            }
+            {props.num === 2 
+                ? <Language 
+                    styles={styles} 
+                    lang_def={fra_def}
+                    def_text="Dictionnaire"
+                    nodef_text="Pas de Définition"
+                    /> 
+                : null
+            }
+            
+            {/* {props.num === 1 ? <Spanish spa_def={spa_def}/> : null}
+            {props.num === 2 ? <French fra_def={fra_def}/> : null} */}
             
             {/* {defi === 'none' 
                 ? <Text>{props.lang_none}</Text> 

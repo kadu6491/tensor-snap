@@ -1,14 +1,8 @@
 import React, {useState, useEffect} from 'react'
 
-import { View, TouchableOpacity, Text, StyleSheet, FlatList} from 'react-native'
-
-import api from '../../api'
-import ItemList from '../Lists/ItemList'
+import { View, Text, StyleSheet} from 'react-native'
 
 function Spanish({spa_def}){
-    const [sWord, seetSWord] = useState([])
-
-   
     return (
         <View>
             <Text>{JSON.stringify(spa_def)}</Text>

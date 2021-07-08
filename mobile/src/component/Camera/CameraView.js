@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Platform} from 'react-native';
 import { Camera } from 'expo-camera';
+import * as ImagePicker from 'expo-image-picker'
 
 import FlipCameraButton from '../Buttons/FlipCameraButton';
 import SnapButton from '../Buttons/SnapButton';
@@ -16,13 +17,17 @@ export default function CameraView({navigation}) {
   const [capturedImage, setCapturedImage] = useState(null)
   const [loading, setLoading] = useState('')
   const [label, setLabel] = useState([])
+  const [image, setImage] = useState(null)
+  const [isNum, setIsNum] = useState(0)
 
   const takePicture = async () => {
       if (!camera) return
       const photo = await camera.takePictureAsync()
       console.log(photo)
+      setIsNum(0)
       setPreviewVisible(true)
       setCapturedImage(photo)
+      setImage(null)
       // getPrediction(photo.uri)
   }
   
@@ -39,11 +44,43 @@ export default function CameraView({navigation}) {
     );
   }
 
+  const pickImge = async () => {
+    let result =  await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      // allowsEditing: true,
+      // aspect: [4, 3], 
+      quality: 1,
+    })
+
+    // console.log(result)
+    // console.log(result.uri)
+
+    if(!result.cancelled)
+    {
+      setPreviewVisible(true)
+      setImage(result)
+      setIsNum(1)
+      setCapturedImage(null)
+      // capturedImage(result)
+      // console.log("***** " + image && image.uri + " ****")
+    }
+  }
+
 
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestPermissionsAsync();
       setHasPermission(status === 'granted');
+    })();
+
+    (async () => {
+      if(Platform.OS !== 'web'){
+        const { status }  = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if(status !== 'granted')
+        {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
     })();
   }, []);
 
@@ -55,9 +92,9 @@ export default function CameraView({navigation}) {
   }
   return (
     <View style={styles.container}>
-      {previewVisible && capturedImage ? (
+      {previewVisible && (capturedImage || image) ? (
         <ImageView 
-          photo={capturedImage} 
+          photo={isNum === 0 ? capturedImage : image} 
           retakePicture={retakePicture}
           loading={loading}
           navigation={navigation}
@@ -69,8 +106,8 @@ export default function CameraView({navigation}) {
           camera = r
         }}
       >
-        <FlipCameraButton onPress={onPress} />
-        <SnapButton takePicture={takePicture} />
+        <FlipCameraButton onPress={onPress} uploadBtn={pickImge}/>
+        <SnapButton takePicture={takePicture}/>
       </Camera>
       )}
     </View>

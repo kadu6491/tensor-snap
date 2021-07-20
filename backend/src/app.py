@@ -19,7 +19,16 @@ fr_trans = Translator(to_lang='fr')
 
 
 def definition(word):
-    return dictionary.meaning(word)
+    define = {}
+
+    dd = dictionary.meaning(word)
+
+    if dd is None:
+        return 'none'
+    for i in dd.keys():
+        define[i] = [x for x in dd[i][:4]]
+
+    return define
 
 
 def img_classifier(imgURL):
@@ -64,10 +73,10 @@ def img_classification():
     img = data.get('imgURL')
     img_class = img_classifier(img)
 
-    # spa_img_trans = img_translation(img_class, 'es')
-    # fra_img_trans = img_translation(img_class, 'fr')
-    spa_img_trans = ['lago', 'Gata', 'teléfono', 'árbol']
-    fra_img_trans = ['Lac', 'Chatte', 'Téléphoner', 'Arbre']
+    spa_img_trans = img_translation(img_class, 'es')
+    fra_img_trans = img_translation(img_class, 'fr')
+    # spa_img_trans = ['lago', 'Gata', 'teléfono', 'árbol']
+    # fra_img_trans = ['Lac', 'Chatte', 'Téléphoner', 'Arbre']
 
     return jsonify({
         "classify": img_class,
@@ -76,24 +85,21 @@ def img_classification():
     })
 
 
-# def def_translation(df, lang):
-#     word_def = {}
-#
-#     if df.keys() is None:
-#         return 'none'
-#
-#     for i in df.keys():
-#         b = TextBlob(i)
-#         word_type = str(b.translate(to=lang))
-#
-#         word_def[word_type] = []
-#
-#         for x in df[i]:
-#             bb = TextBlob(x)
-#             word_des = str(bb.translate(to=lang))
-#             word_def[word_type].append(word_des)
-#
-#     return word_def
+def def_translation(df, lang):
+    word_def = {}
+
+    for i in df.keys():
+        b = TextBlob(i)
+        word_type = str(b.translate(to=lang))
+
+        word_def[word_type] = []
+
+        for x in df[i]:
+            bb = TextBlob(x)
+            word_des = str(bb.translate(to=lang))
+            word_def[word_type].append(word_des)
+
+    return word_def
 
 
 @app.route('/api/word/', methods=['POST'])
@@ -102,13 +108,14 @@ def def_translations():
     words = data.get('word')
     define = definition(words)
 
-    if define is None:
+    if define == 'none':
         return jsonify({'none': 'none'})
     else:
-        # spa_def = def_translation(define, 'es')
-        # fra_def = def_translation(define, 'fr')
-        spa_def = ['lago', 'Gata', 'teléfono', 'árbol']
-        fra_def = ['Lac', 'Chatte', 'Téléphoner', 'Arbre']
+        spa_def = def_translation(define, 'es')
+        fra_def = def_translation(define, 'fr')
+        # spa_def = {'lago': ['test 1 going', 'litte better'], 'Gata': [], 'teléfono': [], 'árbol': []}
+        # fra_def = {'Lac': [], 'Chatte': ['Test 2 coming well', 'Tired of this'], 'Téléphoner': [], 'Arbre': []}
+
         return jsonify({
             "eng_def": define,
             "spa_def": spa_def,

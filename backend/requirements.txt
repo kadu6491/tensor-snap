@@ -6,3 +6,4 @@ numpy
 tensorflow-text
 tensorflow
 textblob
+keras

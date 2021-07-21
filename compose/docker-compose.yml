@@ -35,8 +35,8 @@ services:
     image: backend
     container_name: backend
     build: ../backend
-    depends_on:
-      - mongo
+    # depends_on:
+    #   - mongo
     ports:
       - 5000:5000
     restart: on-failure

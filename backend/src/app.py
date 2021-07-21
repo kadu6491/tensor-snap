@@ -22,7 +22,7 @@ dictionary = PyDictionary()
 translator = Translator(to_lang='es')
 fr_trans = Translator(to_lang='fr')
 
-DEV = True
+DEV = False
 PRODLANG = False
 
 UPLOAD_FOLDER = 'files/'
@@ -173,37 +173,6 @@ def site_classify():
         "spa_img_trans": spa_img_trans,
         "fra_img_trans": fra_img_trans,
     })
-
-
-# @app.route('/api/', methods=['POST'])
-# def word():
-#     data = request.get_json()
-#     im = data.get('imgURL')
-#     img = img_classifier(im)
-#
-#     # define = definition(word)
-#
-#     spa_lang_translate = ['lago', 'Gata', 'teléfono', 'árbol']
-#     fra_lang_translate = ['Lac', 'Chatte', 'Téléphoner', 'Arbre']
-#
-#     return jsonify({
-#         "class": img,
-#         "span_img": spa_lang_translate,
-#         "fran_img": fra_lang_translate,
-#     })
-
-
-# @app.route('/api/definition/', methods=['POST'])
-# def word_define():
-#     data = request.get_json()
-#     word = data.get('word')
-#     define = definition(word)
-#     print(define)
-#
-#     if define is None:
-#         return "none"
-#     else:
-#         return define
 
 
 if __name__ == '__main__':

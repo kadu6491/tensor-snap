@@ -11,7 +11,7 @@ import tensorflow as tf
 import tensorflow_text as tf_text
 
 from flask_cors import *
-from werkzeug.utils import secure_filename
+# from werkzeug.utils import secure_filename
 import os
 
 app = Flask(__name__)
@@ -157,22 +157,22 @@ def test_def(word):
     })
 
 
-@app.route('/api/site/img/', methods=['POST'])
-def site_classify():
-    file = request.files['file']
-    filename = secure_filename(file.filename)
-    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-
-    img_class = img_classifier('files/' + file.filename)
-    print(img_class)
-
-    spa_img_trans, fra_img_trans = results(img_class)
-
-    return jsonify({
-        "classify": img_class,
-        "spa_img_trans": spa_img_trans,
-        "fra_img_trans": fra_img_trans,
-    })
+# @app.route('/api/site/img/', methods=['POST'])
+# def site_classify():
+#     file = request.files['file']
+#     filename = secure_filename(file.filename)
+#     file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#
+#     img_class = img_classifier('files/' + file.filename)
+#     print(img_class)
+#
+#     spa_img_trans, fra_img_trans = results(img_class)
+#
+#     return jsonify({
+#         "classify": img_class,
+#         "spa_img_trans": spa_img_trans,
+#         "fra_img_trans": fra_img_trans,
+#     })
 
 
 if __name__ == '__main__':

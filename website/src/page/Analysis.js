@@ -14,6 +14,22 @@ const Analysis = () => {
     const [loading, setloading] = useState(true)
     const [ready, setReady] = useState(false)
 
+    const [eng, setEng] = useState()
+    const [spa, setSpa] = useState()
+    const [fra, setFra] = useState()
+    // const [engDef, setEngDef] = useState()
+    // const [fraDef, setFraDef] = useState()
+    // const [spaDef, setSpaDef] = useState()
+
+    const [lang, setLang] = useState(0)
+
+    const handleLang = (e) => {
+        setLang(e.target.value)
+    }
+
+
+
+
     const handleFile = (e) => {
         if(e.target.files[0] === undefined || e.target.files[0] == null)
         {
@@ -35,6 +51,14 @@ const Analysis = () => {
 
         api.post('/api/site/img/', datas).then(resp => {
             console.log(resp.data)
+            setEng(resp.data.classify)
+            setSpa(resp.data.spa_img_trans)
+            setFra(resp.data.fra_img_trans)
+
+            // setEngDef(resp.data.eng_def)
+            // setSpaDef(resp.data.spa_def)
+            // setFraDef(resp.data.fra_def)
+
             setloading(false)
         })
     }
@@ -49,7 +73,16 @@ const Analysis = () => {
             />
 
             {ready && <Container maxWidth="md" >
-                        {loading ? <Progress msg="Analyzing......." /> : <Prediction />}
+                        {loading ? <Progress msg="Analyzing......." /> 
+                                : <Prediction 
+                                    classify={eng}
+                                    spa_cla={spa}
+                                    fra_cla={fra}
+                                    
+                                    lang={lang}
+                                    handleLang={handleLang}
+                                  />
+                        }
                      </Container>
             }
         </div>
